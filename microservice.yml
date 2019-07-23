@@ -97,39 +97,42 @@ actions:
         key:
           help: The issue key.
           type: string
-  createProject:
-    help: Create project.
+  listProject:
+    help: Get all project list.
     http:
       port: 3000
       method: post
-      path: /createProject
+      path: /listProject
+      contentType: application/json
+    output:
+      type: list
+      contentType: application/json
+      properties:
+        id:
+          help: The project ID.
+          type: string
+        self:
+          help: The project link.
+          type: string
+        key:
+          help: The project key.
+          type: string
+        name:
+          help: The name of project key.
+          type: string
+  getIssue:
+    help: Get issue by ID.
+    http:
+      port: 3000
+      method: post
+      path: /getIssue
       contentType: application/json
     arguments:
-      key:
+      issueId:
         type: string
         in: requestBody
         required: true
-        help: The project key.
-      name:
-        type: string
-        in: requestBody
-        required: true
-        help: The project name.
-      description:
-        type: string
-        in: requestBody
-        required: true
-        help: The project description.
-      projectTypeKey:
-        type: string
-        in: requestBody
-        required: true
-        help: The project type key any one from this software, business, service_desk.
-      lead:
-        type: string
-        in: requestBody
-        required: true
-        help: The username of project lead or 'admin' for self.
+        help: The ID of issue to get details.
     output:
       type: object
       contentType: application/json
@@ -143,6 +146,9 @@ actions:
         key:
           help: The issue key.
           type: string
+        fields:
+          help: The object with all details as assignee, issuetype, project, reporter.
+          type: object
 environment:
   EMAIL:
     type: string

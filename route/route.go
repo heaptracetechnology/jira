@@ -30,10 +30,16 @@ var routes = Routes{
         jira.CreateIssue,
     },
     Route{
-        "CreateProject",
+        "ListProject",
         "POST",
-        "/createProject",
-        jira.CreateProject,
+        "/listProject",
+        jira.ListProject,
+    },
+    Route{
+        "GetIssue",
+        "POST",
+        "/getIssue",
+        jira.GetIssue,
     },
 }
 

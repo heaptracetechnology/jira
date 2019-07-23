@@ -2,9 +2,7 @@ package jira
 
 import (
 	"encoding/json"
-	//"fmt"
-	//jira "github.com/andygrunwald/go-jira"
-	jira "github.com/heaptracetechnology/jira-go-sdk"
+	jira "github.com/andygrunwald/go-jira"
 	result "github.com/heaptracetechnology/jira/result"
 	"net/http"
 	"os"
@@ -22,6 +20,7 @@ type JiraArguments struct {
 	ProjectName    string `json:"name,omitempty"`
 	ProjectTypeKey string `json:"typeKey,omitempty"`
 	ProjectLead    string `json:"lead,omitempty"`
+	IssueID        string `json:"issueId,omitempty"`
 }
 
 //GetClient Basic Auth Transport
@@ -119,8 +118,8 @@ func CreateIssue(responseWriter http.ResponseWriter, request *http.Request) {
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 }
 
-//CreateProject Jira
-func CreateProject(responseWriter http.ResponseWriter, request *http.Request) {
+//ListProject Jira
+func ListProject(responseWriter http.ResponseWriter, request *http.Request) {
 
 	email := os.Getenv("EMAIL")
 	apiToken := os.Getenv("API_TOKEN")
@@ -140,20 +139,41 @@ func CreateProject(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	projectDetails := jira.CreateProject{
-		Key:            "AD",
-		Name:           "AD Soft-ware",
-		Description:    "Example Project description",
-		ProjectTypeKey: "software",
-		Lead:           "admin",
+	req, _ := client.NewRequest("GET", "rest/api/2/project", nil)
+
+	projects := new([]jira.Project)
+	_, err = client.Do(req, projects)
+	if err != nil {
+		panic(err)
 	}
 
-	project, _, projectErr := client.Project.Create(&projectDetails)
-	if projectErr != nil {
-		result.WriteErrorResponseString(responseWriter, projectErr.Error())
+	bytes, _ := json.Marshal(projects)
+	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
+}
+
+//GetIssue Jira
+func GetIssue(responseWriter http.ResponseWriter, request *http.Request) {
+
+	email := os.Getenv("EMAIL")
+	apiToken := os.Getenv("API_TOKEN")
+	baseURL := os.Getenv("BASE_URL")
+
+	decoder := json.NewDecoder(request.Body)
+	var param JiraArguments
+	decodeErr := decoder.Decode(&param)
+	if decodeErr != nil {
+		result.WriteErrorResponseString(responseWriter, decodeErr.Error())
 		return
 	}
 
-	bytes, _ := json.Marshal(project)
+	client, err := GetClient(email, apiToken, baseURL)
+	if err != nil {
+		result.WriteErrorResponseString(responseWriter, err.Error())
+		return
+	}
+
+	issue, _, _ := client.Issue.Get(param.IssueID, nil)
+
+	bytes, _ := json.Marshal(issue)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 }
