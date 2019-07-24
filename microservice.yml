@@ -73,32 +73,32 @@ actions:
         type: string
         in: requestBody
         required: true
-        help: The account username.
+        help: The assignee username.
       assigneeEmail:
         type: string
         in: requestBody
         required: true
-        help: The account username.
+        help: The assignee email address.
       description:
         type: string
         in: requestBody
         required: true
-        help: The account username.
+        help: The description of issue.
       type:
         type: string
         in: requestBody
         required: true
-        help: The account username
+        help: The type of issue like Bug, Epic, Story.
       projectKey:
         type: string
         in: requestBody
         required: true
-        help: The account username.
+        help: The project key.
       summary:
         type: string
         in: requestBody
         required: true
-        help: The account username.
+        help: The summary of issue.
     output:
       type: object
       contentType: application/json
@@ -152,6 +152,9 @@ actions:
       type: object
       contentType: application/json
       properties:
+        expand:
+          help: The expand.
+          type: string
         id:
           help: The issue ID.
           type: string
