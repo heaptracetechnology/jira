@@ -1,4 +1,4 @@
-package jira
+package service
 
 import (
 	. "github.com/onsi/ginkgo"

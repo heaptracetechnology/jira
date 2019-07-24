@@ -1,4 +1,4 @@
-package jira
+package service
 
 import (
 	"encoding/json"
@@ -144,7 +144,8 @@ func ListProject(responseWriter http.ResponseWriter, request *http.Request) {
 	projects := new([]jira.Project)
 	_, err = client.Do(req, projects)
 	if err != nil {
-		panic(err)
+		result.WriteErrorResponseString(responseWriter, err.Error())
+		return
 	}
 
 	bytes, _ := json.Marshal(projects)
@@ -172,7 +173,11 @@ func GetIssue(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	issue, _, _ := client.Issue.Get(param.IssueID, nil)
+	issue, _, issueErr := client.Issue.Get(param.IssueID, nil)
+	if issueErr != nil {
+		result.WriteErrorResponseString(responseWriter, issueErr.Error())
+		return
+	}
 
 	bytes, _ := json.Marshal(issue)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
