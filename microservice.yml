@@ -37,14 +37,29 @@ actions:
         accountId:
           help: The jira account ID.
           type: string
+        accountType:
+          help: The jira account type.
+          type: string
         name:
           help: The account name.
           type: string
         key:
           help: The account key.
           type: string
+        avatarUrls:
+          help: The link of avatars.
+          type: object
+        displayName:
+          help: The account display name.
+          type: string
+        active:
+          help: Returns boolean, true if account is active else false.
+          type: boolean
         timeZone:
           help: The time zone.
+          type: string
+        locale:
+          help: The locality.
           type: string
   createIssue:
     help: Create issue.
@@ -153,12 +168,12 @@ environment:
   EMAIL:
     type: string
     required: true
-    help: API Key of GoDaddy
+    help: The account email address.
   API_TOKEN:
     type: string
     required: true
-    help: API Key of GoDaddy
+    help: The API token.
   BASE_URL:
     type: string
     required: true
-    help: API Key of GoDaddy
+    help: The baseURL of jira account.

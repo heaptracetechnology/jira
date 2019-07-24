@@ -2,7 +2,7 @@ package route
 
 import (
     "github.com/gorilla/mux"
-    jira "github.com/heaptracetechnology/jira/jira"
+    jira "github.com/heaptracetechnology/jira/service"
     "log"
     "net/http"
 )
